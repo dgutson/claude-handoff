@@ -1,0 +1,15 @@
+{
+  "name": "claude-handoff-marketplace",
+  "description": "Marketplace hosting the claude-handoff plugin.",
+  "owner": {
+    "name": "Daniel Gutson",
+    "url": "https://github.com/dgutson"
+  },
+  "plugins": [
+    {
+      "name": "handoff",
+      "source": ".",
+      "description": "Wraps up a Claude Code session into a HANDOFF.md when context is running low, so you can start a fresh chat without losing findings, experiments, conclusions, or open tasks."
+    }
+  ]
+}

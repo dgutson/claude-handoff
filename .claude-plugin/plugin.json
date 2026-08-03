@@ -1,0 +1,12 @@
+{
+  "name": "handoff",
+  "description": "Wraps up a Claude Code session into a HANDOFF.md when context is running low, so you can start a fresh chat without losing findings, experiments, conclusions, or open tasks.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Daniel Gutson"
+  },
+  "homepage": "https://github.com/dgutson/claude-handoff",
+  "repository": "https://github.com/dgutson/claude-handoff",
+  "license": "MIT",
+  "keywords": ["handoff", "context", "session", "summary", "resume", "compaction"]
+}
