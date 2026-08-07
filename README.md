@@ -21,7 +21,9 @@ only in a conversation you're about to leave behind.
   memory of the old conversation to read cold. If a `HANDOFF.md` already
   exists (a chain of handoffs), it's overwritten with resolved items dropped
   and still-open ones carried forward — never left as a growing pile of
-  `HANDOFF-2.md`-style variants.
+  `HANDOFF-2.md`-style variants. If the working directory is a git repo,
+  `HANDOFF.md` is added to `.gitignore` (creating one if needed) so this
+  personal, session-specific file never gets committed by accident.
 - **`SessionStart` hook** — every new session checks the working directory
   for a leftover `HANDOFF.md`. If one's there, Claude is told to ask you
   whether to read it before doing anything else — never silently ingested,
