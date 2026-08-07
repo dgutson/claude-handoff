@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # SessionStart hook for the handoff plugin.
-# Read-only: looks for a leftover HANDOFF.md in the session's cwd and, if one
-# exists, tells Claude (via additionalContext) to offer reading it rather than
-# silently ingesting it or silently ignoring it.
+# Read-only: looks for a leftover HANDOFF.md in the session's cwd. If one
+# exists, prints a systemMessage so the user sees it immediately on launch
+# (before typing anything), and separately primes Claude via additionalContext
+# so that once the user does respond, Claude knows to ask before reading it
+# rather than silently ingesting or silently ignoring it.
 set -euo pipefail
 
 INPUT="$(cat)"
@@ -18,11 +20,13 @@ print(d.get("cwd") or d.get("workspace", {}).get("current_dir") or "")' 2>/dev/n
 HANDOFF="$CWD/HANDOFF.md"
 
 if [ -f "$HANDOFF" ]; then
-  CONTEXT="A HANDOFF.md exists at $HANDOFF — it may be left over from a previous session that wrapped up here. Before doing anything else, tell the user it's present and ask whether they want you to read it now. Don't read it automatically: it could be stale or unrelated to what they're about to work on. If they confirm, read it and pick up from where it left off. Once its contents are no longer needed (the user says they're caught up, or they start unrelated work), mention that running /handoff:finish will remove it so it doesn't confuse a future session."
+  CONTEXT="A HANDOFF.md exists at $HANDOFF — it may be left over from a previous session that wrapped up here. The user has already been shown a systemMessage about this at session start. Before doing anything else, ask whether they want you to read it now. Don't read it automatically: it could be stale or unrelated to what they're about to work on. If they confirm, read it and pick up from where it left off. Once its contents are no longer needed (the user says they're caught up, or they start unrelated work), mention that running /handoff:finish will remove it so it doesn't confuse a future session."
+  MESSAGE="📋 Found HANDOFF.md from a previous session ($HANDOFF). Tell Claude to read it, or run /handoff:finish to discard it."
 
-  CONTEXT="$CONTEXT" python3 -c '
+  CONTEXT="$CONTEXT" MESSAGE="$MESSAGE" python3 -c '
 import json, os
 print(json.dumps({
+    "systemMessage": os.environ["MESSAGE"],
     "hookSpecificOutput": {
         "hookEventName": "SessionStart",
         "additionalContext": os.environ["CONTEXT"],

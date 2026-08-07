@@ -23,10 +23,11 @@ only in a conversation you're about to leave behind.
   and still-open ones carried forward — never left as a growing pile of
   `HANDOFF-2.md`-style variants.
 - **`SessionStart` hook** — every new session checks the working directory
-  for a leftover `HANDOFF.md`. If one's there, Claude is told to ask you
-  whether to read it before doing anything else — never silently ingested,
-  never silently ignored, since it might be stale or unrelated to what
-  you're about to do next.
+  for a leftover `HANDOFF.md`. If one's there, you see a message about it
+  immediately on launch, before typing anything — it also primes Claude so
+  that once you do respond, it asks before reading it rather than silently
+  ingesting or silently ignoring it, since it might be stale or unrelated to
+  what you're about to do next.
 - **`PostToolUse` hook** — after any `Write`/`Edit` to a file named
   `HANDOFF.md`, automatically adds it to `.gitignore` (creating one if
   needed), so this personal, session-specific file never gets committed by
