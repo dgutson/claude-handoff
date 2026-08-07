@@ -5,8 +5,6 @@ description: Wraps up the current session into a HANDOFF.md so the user can star
 
 Write a `HANDOFF.md` (ask where, default to the current working directory) that lets a fresh chat pick up exactly where this one left off. The person reading it is a new Claude Code session with zero memory of this conversation — write for that reader, not for a human skimming notes.
 
-Before writing, run `${CLAUDE_PLUGIN_ROOT}/scripts/ensure_gitignore.sh <target-dir>` — it gitignores `HANDOFF.md` (creating a `.gitignore` if needed) so this personal, session-specific file never gets committed by accident. It's a no-op outside a git repo and idempotent otherwise, so just run it and move on; no need to narrate the result to the user.
-
 Compose it entirely from what's already in your context (the conversation so far, any earlier auto-summarized portions, and prior tool results) — don't go re-reading transcript files or re-running commands to reconstruct it. This skill tends to get invoked exactly when context is tightest, so keep tool calls minimal.
 
 If a `HANDOFF.md` already exists at the target path, this is a chain of handoffs — the current session likely started by reading it, so its content is already folded into your context. Overwrite it with a new one rather than appending or naming a variant like `HANDOFF-2.md`: there should only ever be one live handoff doc, or old and new versions will contradict each other and it won't be obvious which to trust. When overwriting, carry forward anything from the old file that's still true and unresolved (an open question doesn't disappear just because it wasn't discussed again this session) and drop what this session already resolved.

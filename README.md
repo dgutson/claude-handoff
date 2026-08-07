@@ -21,14 +21,17 @@ only in a conversation you're about to leave behind.
   memory of the old conversation to read cold. If a `HANDOFF.md` already
   exists (a chain of handoffs), it's overwritten with resolved items dropped
   and still-open ones carried forward — never left as a growing pile of
-  `HANDOFF-2.md`-style variants. If the working directory is a git repo,
-  `HANDOFF.md` is added to `.gitignore` (creating one if needed) so this
-  personal, session-specific file never gets committed by accident.
+  `HANDOFF-2.md`-style variants.
 - **`SessionStart` hook** — every new session checks the working directory
   for a leftover `HANDOFF.md`. If one's there, Claude is told to ask you
   whether to read it before doing anything else — never silently ingested,
   never silently ignored, since it might be stale or unrelated to what
   you're about to do next.
+- **`PostToolUse` hook** — after any `Write`/`Edit` to a file named
+  `HANDOFF.md`, automatically adds it to `.gitignore` (creating one if
+  needed), so this personal, session-specific file never gets committed by
+  accident. Pure script, no model involvement — it fires no matter what
+  created the file, and costs no tokens.
 - **`/handoff:finish` command** — once a `HANDOFF.md` has served its purpose,
   this removes it. A leftover handoff file is exactly the kind of stale
   context that confuses a later, unrelated session; this is the explicit
@@ -70,7 +73,8 @@ opening a new chat stays a manual step.
 
 ## Requirements
 
-- `python3` (used by the `SessionStart` hook to parse/emit JSON).
+- `python3` (used by the hooks to parse/emit JSON).
+- `git` (only needed for the `.gitignore` behavior; a no-op outside a repo).
 
 ## License
 
