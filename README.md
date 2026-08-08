@@ -46,6 +46,24 @@ only in a conversation you're about to leave behind.
 /reload-plugins
 ```
 
+**Pick your scope deliberately.** `/plugin install` asks for `user`, `project`
+or `local`; **`user` is almost always what you want.** The plugin's trigger
+isn't a particular repo, it's "this session ran long" — and you don't know in
+advance which project that will be. At `project` or `local` scope everything is
+gated to one repo: the `handoff` skill and `/handoff:finish` don't exist
+elsewhere, and the `SessionStart` hook won't fire, so a leftover `HANDOFF.md`
+in any other directory goes silently unannounced. From the shell:
+
+```
+claude plugin install handoff@claude-handoff-marketplace --scope user
+```
+
+`project` scope is worth it only when you want the convention committed for a
+whole team on one repo; `local` when you're trialling it on a single repo. To
+check what you got, look for `"scope": "user"` under
+`handoff@claude-handoff-marketplace` in
+`~/.claude/plugins/installed_plugins.json`.
+
 ## Usage
 
 ```
