@@ -1,10 +1,7 @@
 ---
 description: Removes the HANDOFF.md that the handoff skill wrote, once its contents are no longer needed. Only run this when the user explicitly invokes it (e.g. /handoff:finish) — never invoke automatically, even right after reading one.
-disable-model-invocation: true
 ---
 
-Find `HANDOFF.md` in the current working directory (or wherever the user points you if they gave a path). If it doesn't exist, say so and stop — there's nothing to clean up.
+A `UserPromptSubmit` hook usually handles this before you are invoked. If the injected context says the hook already deleted `HANDOFF.md` (or already found none), that is done — do not use any tools, just confirm it in one short sentence.
 
-If it exists, show the user a one-line reminder of what it's about (its `# Handoff: <topic>` title and `## Summary` are enough — don't paste the whole file back at them) and confirm they're done with it before deleting. They just ran this command on purpose, so a light confirmation is enough — don't turn it into a multi-step negotiation.
-
-Once confirmed, delete the file. Don't archive it to some other location unless the user asks for that instead — the whole point is that a stale handoff sitting around (here or anywhere else discoverable) is what confuses the next session, and this repo's `SessionStart` hook will flag any `HANDOFF.md` it finds regardless of where it lives in the project.
+Otherwise — typically because the user pointed at a specific path — find that `HANDOFF.md`, delete it, and confirm. If it doesn't exist, say so.
